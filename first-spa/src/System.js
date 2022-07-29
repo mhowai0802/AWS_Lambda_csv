@@ -24,6 +24,10 @@ function handleSubmit(event){
     console.log(number)
 }
 
+// axios.get('https://coqaxw2nncra5xh6fmxhgsn4la0gnjbu.lambda-url.ap-east-1.on.aws/', { params: { device_id: device_id, date_range: number + interval} })
+// .then((res) => { console.table(res.data) })
+// .catch((error) => { console.error(error) })
+// .finally(() => { })
 
   return (
     
