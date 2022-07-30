@@ -1,11 +1,12 @@
 import React, {useState} from 'react'
 import axios from 'axios'
+import { CSVLink, CSVDownload } from "react-csv"
 
 export default function System() {
 
-const [device_id,setdevice] = useState()
-const [interval,setinternval] = useState()
-const [number,setnumber] = useState()
+const [device_id,setdevice] = useState('0')
+const [interval,setinternval] = useState('N/A')
+const [number,setnumber] = useState('0')
 
 function handleChange(event){
     setdevice(event.target.value)
@@ -20,17 +21,15 @@ function handleChange_03(event){
     console.log(event.target.value)
 }
 function handleSubmit(event){
-
     let text = number + " " + interval
     axios({ 
         method: 'get' , 
         url: ' https://coqaxw2nncra5xh6fmxhgsn4la0gnjbu.lambda-url.ap-east-1.on.aws/', 
-        responseType: 'json',
-        'Content-Type': 'application/json',
-        data: {
+        headers: {"Content-Type": "application/json"},
+        params: {
             "function_name" : "from_now",
-            "device_id": "87",
-            "date_range": "2 HOUR"
+            "device_id": device_id,
+            "date_range": text
           }
        }) 
     .then((res) => { console.table(res.data) })
