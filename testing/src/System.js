@@ -1,14 +1,48 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import { CSVLink, CSVDownload } from "react-csv"
 import fileDownload from 'js-file-download'
 
 export default function System() {
 
-const [device_id,setdevice] = useState('0')
+
+const [device,setdevice] = useState('0')
 const [interval,setinternval] = useState('N/A')
 const [number,setnumber] = useState('0')
-var lst = [] 
+const [systemlist, setsystem] = useState([{}])
+
+const daylist = []
+for (let i = 1; i < 30; i++) {
+  daylist.push({
+      id: i,
+      day: i
+  });
+}
+const hourlist = []
+for (let i = 1; i < 24; i++) {
+  hourlist.push({
+      id: i,
+      hour: i
+  });
+}
+const minutelist = []
+for (let i = 1; i < 60; i++) {
+  minutelist.push({
+      id: i,
+      minute: i
+  });
+}
+
+
+
+useEffect ( ()=>{
+    axios({ 
+        method: 'get' , 
+        url: ' https://f3bzwuya7a444klvzuesn2ihje0ipkjr.lambda-url.ap-east-1.on.aws/', 
+        headers: {"Content-Type": "application/json"}
+        }) 
+    .then((res) => {setsystem(res.data)})
+    console.log(systemlist)
+  },[])
 
 function handleChange(event){
     setdevice(event.target.value)
@@ -31,7 +65,7 @@ function handleSubmit(event){
         headers: {"Content-Type": "application/json"},
         params: {
             "function_name" : "from_now",
-            "device_id": device_id,
+            "device_id": device,
             "date_range": text
           }
        }) 
@@ -43,18 +77,42 @@ function handleSubmit(event){
   return (
     
     <div>
-
     Device ID <br/>
-    <select name="device_id" id="selectList" value={device_id} onChange={handleChange}>
-          <option value="15">15</option>
-          <option value="16">16</option>
+    <select name="system" id="selectList" value={device} onChange={handleChange}>
+    {
+    systemlist.map(system =>(
+          <option key={system.id} value={system.id}>{system.name}</option>
+    ))}
     </select> 
     <br/><br/>
     Time from now <br/>
+{   interval == 'HOUR' &&
+    <div>
     <select name="number" id="selectList" value={number} onChange={handleChange_02}>
-          <option value="1">1</option>
-          <option value="2">2</option>
+    { hourlist.map(time =>(
+          <option key={time.id} value={time.hour}>{time.hour}</option>
+    ))}
     </select>
+    </div>
+}
+{   interval == 'MINUTE' &&
+    <div>
+    <select name="number" id="selectList" value={number} onChange={handleChange_02}>
+    { minutelist.map(time =>(
+          <option key={time.id} value={time.minute}>{time.minute}</option>
+    ))}
+    </select>
+    </div>
+}
+{   interval == 'DAY' &&
+    <div>
+    <select name="number" id="selectList" value={number} onChange={handleChange_02}>
+    { daylist.map(time =>(
+          <option key={time.id} value={time.day}>{time.day}</option>
+    ))}
+    </select>
+    </div>
+}
     <select name="interval" id="selectList" value={interval} onChange={handleChange_03}>
           <option value="MINUTE">Minute</option>
           <option value="HOUR">Hour</option>
@@ -62,7 +120,8 @@ function handleSubmit(event){
     </select>
     <br/>
     <br/>
-    <button onClick={handleSubmit}>Send csv</button>
+    <button onClick={handleSubmit}>Download csv</button> 
+
     </div>
   )
 
