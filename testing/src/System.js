@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import { CSVLink, CSVDownload } from "react-csv"
+import fileDownload from 'js-file-download'
 
 export default function System() {
 
@@ -23,7 +24,7 @@ function handleChange_03(event){
 }
 function handleSubmit(event){
     let text = number + " " + interval
- 
+
     axios({ 
         method: 'get' , 
         url: ' https://coqaxw2nncra5xh6fmxhgsn4la0gnjbu.lambda-url.ap-east-1.on.aws/', 
@@ -34,12 +35,10 @@ function handleSubmit(event){
             "date_range": text
           }
        }) 
-    .then((res) => {console.table(res.data);lst= res.data})
+    .then((res) => {fileDownload(res.data, 'testing.csv')})
     .catch((error) => { console.error(error) })
     .finally(() => { })
 }
-
-
 
   return (
     
@@ -64,11 +63,6 @@ function handleSubmit(event){
     <br/>
     <br/>
     <button onClick={handleSubmit}>Send csv</button>
-    <br/>
-    <br/>
-    <CSVLink data={lst}>
-    Download me
-    </CSVLink>;
     </div>
   )
 
