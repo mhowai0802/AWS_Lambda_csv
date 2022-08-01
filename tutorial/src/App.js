@@ -1,14 +1,14 @@
-import Dropdown from "./Dropdown";
 import {CartContext} from './CartContext'
 import { useState } from "react";
 import Systemlist from "./Systemlist";
 import Timelist from "./Timelist";
 import axios from 'axios'
 import fileDownload from 'js-file-download'
+import { Button } from '@mui/material';
 
 function App() {
 
-  const [device,setdevice] = useState('AE01')
+  const [device,setdevice] = useState('15')
   const [interval,setinternval] = useState('MINUTE')
   const [number,setnumber] = useState('1')
   const [systemlist, setsystem] = useState([{}])
@@ -32,9 +32,12 @@ function App() {
   return (
     <div>
     <CartContext.Provider value={{systemlist,setsystem,device,setdevice,interval,setinternval,number,setnumber}}>
+    <br/>
     <Systemlist/>
+    <br/>
     <Timelist/>
-    <button onClick={handleSubmit}>Download csv</button> 
+    <br/>
+    <Button onClick={handleSubmit} variant="outlined">Download csv</Button>
     </CartContext.Provider>
     </div>
   );

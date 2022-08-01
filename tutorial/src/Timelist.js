@@ -1,6 +1,8 @@
 import React from 'react'
-import {useState, useEffect, useContext} from "react" 
+import {useContext} from "react" 
 import {CartContext} from './CartContext'
+import Select from 'react-select'
+
 
 export default function Timelist() {
 
@@ -10,68 +12,59 @@ const {number,setnumber} = useContext(CartContext)
 const daylist = []
 for (let i = 1; i < 30; i++) {
     daylist.push({
-        id: i,
-        day: i
+        label: i,
+        value: i
     });
 }
 const hourlist = []
 for (let i = 1; i < 24; i++) {
     hourlist.push({
-        id: i,
-        hour: i
+        label: i,
+        value: i
     });
 }
 const minutelist = []
 for (let i = 1; i < 60; i++) {
     minutelist.push({
-        id: i,
-        minute: i
+        label: i,
+        value: i
     });
 }
-  
+ 
 function handleChange_02(event){
-    setnumber(event.target.value)
+    setnumber(event['value'])
 }  
 
 function handleChange_03(event){
-    setinternval(event.target.value)
+    setinternval(event['value'])
 }
+
+const intervallst = [
+    {label:"Minute",value:"Minute"},
+    {label:"Hour",value:"Hour"},
+    {label:"Day",value:"Day"}
+]
 
 return (
     <div>
     Time from now <br/>
-    {   interval == 'HOUR' &&
+    {   interval === 'Hour' &&
     <div>
-    <select name="number" id="selectList" value={number} onChange={handleChange_02}>
-    { hourlist.map(time =>(
-          <option key={time.id} value={time.hour}>{time.hour}</option>
-    ))}
-    </select>
+    <Select options={hourlist} className="basic-select" onChange={handleChange_02}/>
     </div>
 }
-{   interval == 'MINUTE' &&
+{   interval === 'Minute' &&
     <div>
-    <select name="number" id="selectList" value={number} onChange={handleChange_02}>
-    { minutelist.map(time =>(
-          <option key={time.id} value={time.minute}>{time.minute}</option>
-    ))}
-    </select>
+    <Select options={minutelist} className="basic-select" onChange={handleChange_02}/>
     </div>
 }
-{   interval == 'DAY' &&
+{   interval === 'Day' &&
     <div>
-    <select name="number" id="selectList" value={number} onChange={handleChange_02}>
-    { daylist.map(time =>(
-          <option key={time.id} value={time.day}>{time.day}</option>
-    ))}
-    </select>
+    <Select options={daylist} className="basic-select" onChange={handleChange_02}/>
     </div>
 }
-    <select name="interval" id="selectList" value={interval} onChange={handleChange_03}>
-    <option value="MINUTE">Minute</option>
-    <option value="HOUR">Hour</option>
-    <option value="DAY">Day</option>
-    </select>
+    <Select options={intervallst} className="basic-select" onChange={handleChange_03}/>
     </div>
   )
 }
+
